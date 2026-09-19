@@ -1,0 +1,148 @@
+CSS
+/* --- CONFIGURAÇÕES GERAIS --- */
+html {
+    scroll-behavior: smooth; /* Faz a tela deslizar suavemente até o "Sobre nós" e "Contato" */
+}
+
+body {
+    background-color: black;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    text-align: center;   
+}
+
+h1 {
+    color: #f0f0f0;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
+    color: #f0f0f0;
+    text-align: center;
+}
+
+/* --- LOGO FLUTUANTE --- */
+.brand-logo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    background-color: #ffffff;
+    border: 3px solid #7b2cbf;
+    border-radius: 24px;
+    box-shadow: 0 0 25px rgba(123, 44, 191, 0.5);
+    position: relative;
+    top: -75px;
+    margin-bottom: -75px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.brand-logo:hover {
+    transform: translateY(-79px) scale(1.08);
+    box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
+}
+
+/* --- LAYOUT DO CARD CENTRAL --- */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.welcome-box {
+    background-color: #18181c;
+    border: 2px solid #7b2cbf;
+    border-radius: 16px;
+    padding: 40px 60px;
+    text-align: center;
+    max-width: 540px;
+    width: 90%;
+    box-shadow: 0 0 25px rgba(123, 44, 191, 0.25);
+    position: relative;
+    margin-top: 50px;
+}
+
+/* --- MENUS E ALINHAMENTOS --- */
+.menu-botoes {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 24px;
+}
+.navbar-topo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 40px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+.menu-botoes2 ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.menu-botoes2{
+    padding: 10px 20px;
+    font-size: 14px;
+}
+/* --- BOTÃO PADRONIZADO (Único e sem repetições) --- */
+.btn {
+    text-decoration: none;
+    background-color: #800080;
+    color: #f0f0f0;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block; /* Garante que o tamanho se ajuste ao texto perfeitamente */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #EE82EE;
+    transform: scale(1.05); /* Faz o botão crescer suavemente */
+}
+
+/* --- SEÇÕES DE SCROLL (Sobre Nós e Contato) --- */
+.conteudo {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #4d0757;
+    background-color: #0f0f12; /* Tom escuro combinando com o painel */
+}
+
+/* --- ELEMENTOS EXTRAS (Caso use botões de avançar no conteúdo) --- */
+.bloco-prosseguir {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: 40px;
+    width: 100%;
+    gap: 20px;
+}
+
+.btn2-prosseguir {
+    background-color: #800080;
+    color: #f0f0f0;
+    padding: 14px 18px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn2-prosseguir:hover {
+    background-color: #ee82ee;
+    transform: scale(1.05);
+}
