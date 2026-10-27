@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Entrar - Reading Universe</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <!-- Caixa de Login -->
+    <div class="auth-wrapper" id="login-container">
+        <div class="auth-header">
+            <h2>Bem-vindo de volta</h2>
+            <p>Entre para continuar sua jornada cósmica</p>
+        </div>
+
+        <form id="login-form" class="auth-form">
+            <div class="auth-input-group">
+                <label>E-mail</label>
+                <!-- Note o ID: login-email -->
+                <input type="email" id="login-email" placeholder="seu@email.com" required>
+            </div>
+            <div class="auth-input-group">
+                <label>Senha</label>
+                <!-- Note o ID: login-senha -->
+                <input type="password" id="login-senha" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="auth-btn">Entrar</button>
+        </form>
+
+        <div class="auth-switch">
+            Ainda não tem uma conta? <a href="cadastre-se.html">Cadastre-se</a>
+        </div>
+    </div>
+
+    <!-- Caixa de Cadastro (Inicia escondida) -->
+    <div class="auth-wrapper hidden" id="register-container">
+        <div class="auth-header">
+            <h2>Criar Conta</h2>
+            <p>Junte-se ao Reading Universe</p>
+        </div>
+
+        <form id="form-register" class="auth-form">
+            <div class="auth-input-group">
+                <label>Nome / Pseudônimo</label>
+                <input type="text" id="reg-nome" placeholder="Leitor Lumina" required>
+            </div>
+            <div class="auth-input-group">
+                <label>E-mail</label>
+                <input type="email" id="reg-email" placeholder="seu@email.com" required>
+            </div>
+            <div class="auth-input-group">
+                <label>Senha</label>
+                <input type="password" id="reg-senha" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="auth-btn">Cadastrar</button>
+        </form>
+
+        <div class="auth-switch">
+            Já possui uma conta? <a href="#" id="to-login">Entrar</a>
+        </div>
+    </div>
+
+    <script src="leitores/jvsp/auth.js"></script>
+</body>
+
+</html>

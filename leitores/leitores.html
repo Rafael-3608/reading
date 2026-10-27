@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Leitores</title>
+    <link rel="stylesheet" href="../css/style4.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FontAwesome para os ícones dos Kits Temáticos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- BARRA LATERAL (Navegação Funcional) -->
+        <aside class="sidebar">
+            <div>
+                <!-- PERFIL DO USUÁRIO (ALVO DE ATUALIZAÇÃO VIA JS) -->
+                <div class="profile-box">
+                    <div id="user-avatar-container" style="position: relative; flex-shrink: 0;">
+                        <img id="user-avatar-img" src="" alt="Avatar" class="avatar"
+                            style="display: none; object-fit: cover; width: 45px; height: 45px; border-radius: 50%;">
+                        <div id="user-avatar-fallback" class="avatar"
+                            style="display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">
+                            <i id="user-avatar-icon" class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="profile-info" id="user-info-text-container">
+                        <h3 id="user-name-target">Leitor Lumina</h3>
+                        <p id="user-sub-target">Explorador Cósmico</p>
+                    </div>
+                </div>
+
+                <nav class="nav-menu">
+                    <!-- Cada botão agora tem um atributo "data-target" mapeando sua respectiva tela -->
+                    <button class="nav-item active" data-target="view-leitor">
+                        <span class="icon-only">📖</span> <span>Leitor</span>
+                    </button>
+                    <button class="nav-item nav-subitem" data-target="view-leitor">Dicas de Leitura</button>
+
+                    <button class="nav-item" data-target="view-autor">
+                        <span class="icon-only">✍️</span> <span>Autor</span>
+                    </button>
+
+                    <button class="nav-item" data-target="view-resumos">
+                        <span class="icon-only">📄</span> <span>Resumos de Artigos</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="nav-item" data-target="view-config"><span>⚙️</span> <span>Configurações</span></button>
+                <button class="nav-item" style="color: #ef4444;"
+                    onclick="sessionStorage.removeItem('usuarioLogado'); window.location.href='../index.html';">
+                    <span>🚪</span> <span>Sair</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ÁREA CENTRAL DE CONTEÚDO -->
+        <main class="main-content">
+
+            <div id="view-leitor" class="content-view active-view">
+
+                <header class="top-bar">
+                    <h2>Leitor</h2>
+                    <div class="search-box"><input type="text" placeholder="Pesquisar livros..."></div>
+                </header>
+
+                <!-- SELETOR DOS 5 KITS TEMÁTICOS -->
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; align-items: center;">
+                    <button id="btn-reading_universe" onclick="selecionarKit('reading_universe')"
+                        class="kit-selector-btn"
+                        style="background: #130f26; border: 1px solid #231b42; color: #e2e8f0; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-galaxy" style="color: #9d4edd;"></i> Reading Universe
+                    </button>
+                    <button id="btn-explorador_cosmico" onclick="selecionarKit('explorador_cosmico')"
+                        class="kit-selector-btn"
+                        style="background: #130f26; border: 1px solid #231b42; color: #e2e8f0; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-user-astronaut" style="color: #38bdf8;"></i> Explorador Cósmico
+                    </button>
+                    <button id="btn-biblioteca_classica" onclick="selecionarKit('biblioteca_classica')"
+                        class="kit-selector-btn"
+                        style="background: #130f26; border: 1px solid #231b42; color: #e2e8f0; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-book-bookmark" style="color: #fbbf24;"></i> Biblioteca Clássica
+                    </button>
+                    <button id="btn-romantico" onclick="selecionarKit('romantico')" class="kit-selector-btn"
+                        style="background: #130f26; border: 1px solid #231b42; color: #e2e8f0; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-heart" style="color: #ff2a85;"></i> Romântico
+                    </button>
+                    <button id="btn-terror" onclick="selecionarKit('terror')" class="kit-selector-btn"
+                        style="background: #130f26; border: 1px solid #231b42; color: #e2e8f0; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-skull" style="color: #f43f5e;"></i> Terror & Mistério
+                    </button>
+                </div>
+
+                <!-- BANNER CENTRAL DINÂMICO -->
+                <section id="main-banner-card" class="hero-banner"
+                    style="background-size: cover; background-position: center; transition: background-image 0.5s ease;">
+                    <div id="banner-badge" class="badge">Recomendados para você</div>
+                    <h1 id="banner-title">Dicas de Leitura</h1>
+                    <p id="banner-desc" style="color: #a1a1aa; font-size: 0.9rem; margin-top: 6px; max-width: 500px;">
+                        Explore uma seleção de obras fantásticas personalizadas de acordo com seu tema favorito.</p>
+                </section>
+
+                <section class="section-container">
+                    <div class="section-header">
+                        <div class="section-title"><span>❤️</span> Romance</div>
+                        <a href="#" class="view-all">VER TUDO</a>
+                    </div>
+                    <div class="books-grid">
+                        <div class="book-card"
+                            data-synopsis="Um clássico absoluto. A história acompanha a espirituosa Elizabeth Bennet e o aristocrático Sr. Darcy lidando com seus próprios erros de julgamento, orgulho e as pressões sociais da época.">
+                            <div class="book-cover">📖</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">Orgulho e Preconceito</h4>
+                                    <p class="book-description">Jane Austen explora as nuances do amor e das relações
+                                        sociais na Inglaterra do século XIX.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Clássico</span> <span class="tag">Jane
+                                        Austen</span></div>
+                            </div>
+                        </div>
+
+                        <div class="book-card"
+                            data-synopsis="Um amor proibido e intenso nasce entre dois jovens de famílias inimigas em Verona, desencadeando uma sequência de eventos que desafia o destino e as rivalidades locais.">
+                            <div class="book-cover">🌹</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">Romeu e Julieta</h4>
+                                    <p class="book-description">A mais famosa e trágica história de amor da literatura
+                                        ocidental.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Clássico</span> <span
+                                        class="tag">Shakespeare</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-container">
+                    <div class="section-header">
+                        <div class="section-title"><span>🩸</span> Terror</div>
+                        <a href="#" class="view-all">VER TUDO</a>
+                    </div>
+                    <div class="books-grid">
+                        <div class="book-card"
+                            data-synopsis="O escritor Jack Torrance consegue um emprego como zelador de inverno no isolado Hotel Overlook. Ao se mudar com sua família, forças sobrenaturais malignas que habitam o local começam a influenciar sua mente de forma violenta.">
+                            <div class="book-cover">🪓</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">O Iluminado</h4>
+                                    <p class="book-description">Uma descida assustadora e psicológica à loucura em um
+                                        hotel isolado pela neve.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Psicológico</span> <span class="tag">Stephen
+                                        King</span></div>
+                            </div>
+                        </div>
+
+                        <div class="book-card"
+                            data-synopsis="Uma espiral obsessiva consome os habitantes de uma pequena cidade japonesa, onde eventos bizarros e grotescos começam a acontecer, todos interligados pelo padrão misterioso e amaldiçoado de espirais.">
+                            <div class="book-cover">🌀</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">Uzumaki</h4>
+                                    <p class="book-description">O horror cósmico e corporal toma forma através de uma
+                                        maldição geométrica inevitável.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Mangá</span> <span class="tag">Junji Ito</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-container">
+                    <div class="section-header">
+                        <div class="section-title"><span>🎭</span> Drama</div>
+                        <a href="#" class="view-all">VER TUDO</a>
+                    </div>
+                    <div class="books-grid">
+                        <div class="book-card"
+                            data-synopsis="Lily Bloom encontra um amor intenso e avassalador em Ryle Kincaid, mas logo se vê presa em um ciclo complexo e doloroso, precisando encontrar forças para interrompê-lo.">
+                            <div class="book-cover">🌸</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">É Assim que Acaba</h4>
+                                    <p class="book-description">Uma história emocionante e dolorosa sobre escolhas
+                                        difíceis, superação e amor próprio.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Drama</span> <span class="tag">Colleen
+                                        Hoover</span></div>
+                            </div>
+                        </div>
+
+                        <div class="book-card"
+                            data-synopsis="A comovente trajetória de dois jovens pacientes oncológicos que se conhecem em um grupo de apoio e decidem viver uma intensa e bela história de amor, desafiando o pouco tempo que lhes resta.">
+                            <div class="book-cover">☁️</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">A Culpa é das Estrelas</h4>
+                                    <p class="book-description">Uma jornada emocionante sobre a vida, a morte e o
+                                        impacto avassalador do primeiro amor.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Romance</span> <span class="tag">John
+                                        Green</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-container">
+                    <div class="section-header">
+                        <div class="section-title"><span>🧭</span> Aventura</div>
+                        <a href="#" class="view-all">VER TUDO</a>
+                    </div>
+                    <div class="books-grid">
+                        <div class="book-card"
+                            data-synopsis="O jovem hobbit Frodo Bolseiro herda um anel de poder incomensurável e recebe a perigosa missão de cruzar a Terra-média para destruí-lo na Montanha da Perdição, antes que o Senhor Sombrio o recupere.">
+                            <div class="book-cover">💍</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">O Senhor dos Anéis</h4>
+                                    <p class="book-description">Uma jornada épica de coragem, amizade e a eterna luta
+                                        entre as forças do bem e do mal.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Épico</span> <span class="tag">J.R.R.
+                                        Tolkien</span></div>
+                            </div>
+                        </div>
+
+                        <div class="book-card"
+                            data-synopsis="Percy Jackson descobre que os deuses do Olimpo estão vivos e que ele é um semideus, filho de Poseidon. Quando o raio mestre de Zeus é roubado, Percy se torna o principal suspeito e precisa cruzar a América para provar sua inocência.">
+                            <div class="book-cover">⚡</div>
+                            <div class="book-info">
+                                <div>
+                                    <h4 class="book-title">O Ladrão de Raios</h4>
+                                    <p class="book-description">Mitologia grega antiga e o mundo moderno colidem em uma
+                                        corrida eletrizante contra o tempo.</p>
+                                </div>
+                                <div class="book-tags"><span class="tag">Mitologia</span> <span class="tag">Rick
+                                        Riordan</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div id="view-autor" class="content-view">
+                <header class="top-bar">
+                    <h2>Área do Autor</h2>
+                </header>
+
+                <div class="hero-banner"
+                    style="background: linear-gradient(135deg, rgba(244, 114, 182, 0.2) 0%, rgba(15,15,18,0.9) 100%); margin-bottom: 24px; padding: 30px; border-radius: 12px;">
+                    <div class="badge"
+                        style="background-color: rgba(244, 114, 182, 0.2); color: var(--text-pink); padding: 4px 12px; border-radius: 99px; display: inline-block; font-size: 0.8rem; font-weight: bold; margin-bottom: 12px;">
+                        Painel Criativo</div>
+                    <h1 style="font-size: 2.2rem; font-weight: 700; color: #fff;">Gerencie suas Publicações</h1>
+                </div>
+
+                <div id="container-autor-box"
+                    style="background-color: #131316; padding: 40px 30px; border-radius: 12px; border: 1px dashed #27272a; display: flex; justify-content: center; align-items: center; min-height: 250px; transition: all 0.3s ease;">
+
+                    <div id="autor-estado-inicial" style="text-align: center; display: block;">
+                        <p style="color: #a1a1aa; margin-bottom: 20px; font-size: 1rem;">Você ainda não publicou nenhum
+                            manuscrito como autor.</p>
+                        <button id="btn-iniciar-obra"
+                            style="background-color: transparent; border: 1px solid #27272a; color: white; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s;">
+                            + Iniciar Nova Obra
+                        </button>
+                    </div>
+
+                    <div id="autor-estado-formulario" style="display: none; width: 100%; max-width: 450px;">
+                        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: #fff;">Divulgue seu
+                            Conto</h2>
+                        <p style="color: #a1a1aa; font-size: 0.9rem; margin-bottom: 24px;">Preencha os detalhes abaixo
+                            para publicar sua obra na biblioteca da Reading Universe</p>
+
+                        <form id="form-novo-conto" style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label
+                                    style="color: #f472b6; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Título
+                                    do Conto</label>
+                                <input type="text" placeholder="Ex: O Sussurro das Estrelas" required
+                                    style="background-color: #0f0f12; border: 1px solid #27272a; padding: 12px 16px; border-radius: 8px; color: white; outline: none; width: 100%;">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label
+                                    style="color: #f472b6; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Autor
+                                    do Conto</label>
+                                <input type="text" placeholder="Seu nome ou pseudônimo" required
+                                    style="background-color: #0f0f12; border: 1px solid #27272a; padding: 12px 16px; border-radius: 8px; color: white; outline: none; width: 100%;">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label
+                                    style="color: #f472b6; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Categoria
+                                    do Conto</label>
+                                <select required
+                                    style="background-color: #0f0f12; border: 1px solid #27272a; padding: 12px 16px; border-radius: 8px; color: #a1a1aa; outline: none; width: 100%; cursor: pointer;">
+                                    <option value="" disabled selected>Selecione o gênero...</option>
+                                    <option value="romance">Romance</option>
+                                    <option value="terror">Terror</option>
+                                    <option value="drama">Drama</option>
+                                    <option value="aventura">Aventura</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label
+                                    style="color: #f472b6; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Descrição
+                                    do Conto</label>
+                                <textarea placeholder="Uma breve sinopse para instigar seus leitores..." required
+                                    rows="4"
+                                    style="background-color: #0f0f12; border: 1px solid #27272a; padding: 12px 16px; border-radius: 8px; color: white; outline: none; width: 100%; resize: none; font-family: inherit;"></textarea>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+                                <button type="button" id="btn-cancelar"
+                                    style="background: transparent; border: 1px solid #27272a; color: #a1a1aa; padding: 12px 24px; border-radius: 99px; font-weight: bold; cursor: pointer;">Cancelar</button>
+                                <button type="submit"
+                                    style="background-color: #a855f7; color: white; border: none; padding: 12px 24px; border-radius: 99px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                    Enviar <span style="font-size: 0.8rem;">➤</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="view-resumos" class="content-view">
+                <header class="top-bar">
+                    <h2>Resumos de Artigos</h2>
+                </header>
+                <div class="books-grid">
+                    <div class="book-card">
+                        <div class="book-cover">📄</div>
+                        <div class="book-info">
+                            <h4 class="book-title">A Evolução da Literatura Digital</h4>
+                            <p class="book-description">Análise detalhada sobre como os e-readers e plataformas web
+                                mudaram os hábitos de consumo de livros na última década.</p>
+                            <div class="book-tags"><span class="tag">Artigo Científico</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-config" class="content-view">
+                <header class="top-bar">
+                    <h2>Configurações do Sistema</h2>
+                </header>
+                <p style="color: var(--text-muted)">Ajustes de interface, notificações de leitura e gerenciamento de
+                    conta do painel Lumina.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JANELA INTERATIVA (MODAL DO LIVRO CLICADO) -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal-box">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            <div class="modal-body">
+                <div class="book-cover" id="modalCover" style="font-size: 3rem; width: 120px; height: 170px;">📖</div>
+                <div class="modal-main-info">
+                    <div>
+                        <h2 id="modalTitle" style="color: var(--text-pink); margin-bottom: 8px;">Título do Livro</h2>
+                        <p id="modalSynopsis"
+                            style="color: var(--text-main); font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px;">
+                            Sinopse detalhada...</p>
+                    </div>
+                    <!-- BOTÃO COM ID ATUALIZADO PARA REDIRECIONAR CORRETAMENTE -->
+                    <button class="btn-read" id="btnComecarLeitura">Começar Leitura ➔</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="chat-toggle-btn" onclick="toggleChat()">💬</button>
+
+    <div class="chat-container hidden" id="meuChat">
+        <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>🤖 Lumina Bot</span>
+            <button class="clos-chat-btn" onclick="toggleChat()">&times;</button>
+        </div>
+
+        <div class="mensagens" id="mensagens">
+            <div class="mensagem bot">Olá! Como posso te ajudar na sua leitura hoje?</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="entrada" placeholder="Digite algo...">
+            <button onclick="enviar()">Enviar</button>
+        </div>
+    </div>
+
+    <script src="jvsp/projeto.js"></script>
+
+</body>
+
+</html>

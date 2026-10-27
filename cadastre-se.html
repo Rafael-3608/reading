@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Criar Conta - Reading Universe</title>
+        <link rel="stylesheet" href="css/login.css">
+    </head>
+    <body>
+        <!-- Caixa de Cadastro Dedicada -->
+    <div class="auth-wrapper" id="register-container">
+        <div class="auth-header">
+            <h2>Criar Conta</h2>
+            <p>Junte-se ao Reading Universe</p>
+        </div>
+
+        <form id="form-register" class="auth-form">
+            <div class="auth-input-group">
+                <label>Nome / Pseudônimo</label>
+                <input type="text" id="reg-nome" placeholder="Leitor Lumina" required>
+            </div>
+            <div class="auth-input-group">
+                <label>E-mail</label>
+                <input type="email" id="reg-email" placeholder="seu@email.com" required>
+            </div>
+            <div class="auth-input-group">
+                <label>Senha</label>
+                <input type="password" id="reg-senha" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="auth-btn">Cadastrar Conta</button>
+        </form>
+
+        <div class="auth-switch">
+            Já possui uma conta? <a href="login.html">Entrar</a>
+        </div>
+    </div>
+
+<script src="leitores/jvsp/cadastro.js"></script>
+    </body>
+</html>

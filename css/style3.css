@@ -1,0 +1,90 @@
+body{
+    background-color: black;
+    color: #f0f0f0;
+    padding: 20px 24px;
+    margin: 20px;
+}
+.titulo{
+    text-align: center;
+}
+nav ul{
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+    display: flex; 
+    gap: 15px; 
+}
+.btn{
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: purple;
+    color: #f0f0f0;
+    text-decoration: none;
+    border-radius: 6px;
+    font-family: sans-serif;
+    font-weight: bold;
+    transition: background color 0.3s ease, transform 0.1 ease ;
+}
+.btn:hover{
+    background-color: #ee82ee;
+    transition: 0.3s;
+    transform: translatey(-2px);
+}
+.btn:active{
+    transform: translatey(0);
+}
+.divisor-secao {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 40px 0;
+}
+
+.rodape-sobre {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-bottom: 40px;
+}
+
+.contato-plataforma h3, .devs-github h3 {
+    color: var(--text-color, #fff);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.email-link {
+    color: #ff66b2; /* Aquele tom de rosa/pink de destaque que vocês usam */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.email-link:hover {
+    color: #cc528f;
+}
+
+.links-github {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #a855f7; /* O roxo marcante do botão do chat */
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.github-btn:hover {
+    background-color: #9333ea;
+    transform: translateY(-2px); /* Efeito sutil de flutuar ao passar o mouse */
+}
