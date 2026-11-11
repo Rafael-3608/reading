@@ -8,6 +8,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- FontAwesome para os ícones dos Kits Temáticos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Capas no lugar dos ícones dos cartões */
+        .book-card > .book-cover {
+            flex: 0 0 84px;
+            width: 84px;
+            height: 136px;
+            padding: 0;
+            overflow: hidden;
+            display: block;
+            border-radius: 8px;
+            background: #25252d;
+            line-height: 0;
+        }
+        .book-card > .book-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+        #modalCover {
+            flex: 0 0 120px;
+            overflow: hidden;
+            padding: 0;
+            line-height: 0;
+            border-radius: 9px;
+        }
+        #modalCover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+        @media (max-width: 600px) {
+            .book-card > .book-cover { flex-basis: 72px; width: 72px; height: 116px; }
+        }
+    </style>
 </head>
 
 <body>
@@ -113,7 +151,7 @@
                     <div class="books-grid">
                         <div class="book-card"
                             data-synopsis="Um clássico absoluto. A história acompanha a espirituosa Elizabeth Bennet e o aristocrático Sr. Darcy lidando com seus próprios erros de julgamento, orgulho e as pressões sociais da época.">
-                            <div class="book-cover">📖</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg" alt="Capa de Orgulho e Preconceito" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">Orgulho e Preconceito</h4>
@@ -127,7 +165,7 @@
 
                         <div class="book-card"
                             data-synopsis="Um amor proibido e intenso nasce entre dois jovens de famílias inimigas em Verona, desencadeando uma sequência de eventos que desafia o destino e as rivalidades locais.">
-                            <div class="book-cover">🌹</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780743477116-L.jpg" alt="Capa de Romeu e Julieta" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">Romeu e Julieta</h4>
@@ -149,7 +187,7 @@
                     <div class="books-grid">
                         <div class="book-card"
                             data-synopsis="O escritor Jack Torrance consegue um emprego como zelador de inverno no isolado Hotel Overlook. Ao se mudar com sua família, forças sobrenaturais malignas que habitam o local começam a influenciar sua mente de forma violenta.">
-                            <div class="book-cover">🪓</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780307743657-L.jpg" alt="Capa de O Iluminado" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">O Iluminado</h4>
@@ -163,7 +201,7 @@
 
                         <div class="book-card"
                             data-synopsis="Uma espiral obsessiva consome os habitantes de uma pequena cidade japonesa, onde eventos bizarros e grotescos começam a acontecer, todos interligados pelo padrão misterioso e amaldiçoado de espirais.">
-                            <div class="book-cover">🌀</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9781421561325-L.jpg" alt="Capa de Uzumaki" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">Uzumaki</h4>
@@ -185,7 +223,7 @@
                     <div class="books-grid">
                         <div class="book-card"
                             data-synopsis="Lily Bloom encontra um amor intenso e avassalador em Ryle Kincaid, mas logo se vê presa em um ciclo complexo e doloroso, precisando encontrar forças para interrompê-lo.">
-                            <div class="book-cover">🌸</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9781501110368-L.jpg" alt="Capa de É Assim que Acaba" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">É Assim que Acaba</h4>
@@ -199,7 +237,7 @@
 
                         <div class="book-card"
                             data-synopsis="A comovente trajetória de dois jovens pacientes oncológicos que se conhecem em um grupo de apoio e decidem viver uma intensa e bela história de amor, desafiando o pouco tempo que lhes resta.">
-                            <div class="book-cover">☁️</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780142424179-L.jpg" alt="Capa de A Culpa é das Estrelas" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">A Culpa é das Estrelas</h4>
@@ -221,7 +259,7 @@
                     <div class="books-grid">
                         <div class="book-card"
                             data-synopsis="O jovem hobbit Frodo Bolseiro herda um anel de poder incomensurável e recebe a perigosa missão de cruzar a Terra-média para destruí-lo na Montanha da Perdição, antes que o Senhor Sombrio o recupere.">
-                            <div class="book-cover">💍</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780547928210-L.jpg" alt="Capa de O Senhor dos Anéis" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">O Senhor dos Anéis</h4>
@@ -235,7 +273,7 @@
 
                         <div class="book-card"
                             data-synopsis="Percy Jackson descobre que os deuses do Olimpo estão vivos e que ele é um semideus, filho de Poseidon. Quando o raio mestre de Zeus é roubado, Percy se torna o principal suspeito e precisa cruzar a América para provar sua inocência.">
-                            <div class="book-cover">⚡</div>
+                            <div class="book-cover"><img src="https://covers.openlibrary.org/b/isbn/9780786838653-L.jpg" alt="Capa de O Ladrão de Raios" loading="lazy"></div>
                             <div class="book-info">
                                 <div>
                                     <h4 class="book-title">O Ladrão de Raios</h4>
@@ -369,7 +407,7 @@
         <div class="modal-box">
             <button class="close-modal" id="closeModalBtn">&times;</button>
             <div class="modal-body">
-                <div class="book-cover" id="modalCover" style="font-size: 3rem; width: 120px; height: 170px;">📖</div>
+                <div class="book-cover" id="modalCover" style="font-size: 0; width: 120px; height: 170px;"><span aria-hidden="true">📖</span></div>
                 <div class="modal-main-info">
                     <div>
                         <h2 id="modalTitle" style="color: var(--text-pink); margin-bottom: 8px;">Título do Livro</h2>
@@ -403,6 +441,23 @@
     </div>
 
     <script src="jvsp/projeto.js"></script>
+    <script>
+        // Mantém a capa do modal igual à capa exibida no cartão selecionado.
+        document.addEventListener('click', function (event) {
+            const card = event.target.closest('.book-card');
+            if (!card) return;
+            const sourceCover = card.querySelector('.book-cover img');
+            const modalCover = document.getElementById('modalCover');
+            if (!sourceCover || !modalCover) return;
+            window.setTimeout(function () {
+                modalCover.innerHTML = '';
+                const image = document.createElement('img');
+                image.src = sourceCover.src;
+                image.alt = sourceCover.alt;
+                modalCover.appendChild(image);
+            }, 0);
+        });
+    </script>
 
 </body>
 

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0b0f">
+    <title>Santuário do Autor - Reading Universe</title>
+    <link rel="stylesheet" href="../css/style4.css">
+    <link rel="stylesheet" href="../css/escrever.css">
+</head>
+<body>
+    <main class="book-editor-container">
+        <header class="book-header">
+            <div class="book-heading">
+                <h2 id="titulo-obra-exibicao">Escrevendo Obra...</h2>
+                <p class="book-subtitle" id="autor-obra-exibicao">
+                    Santuário Criativo Lumina
+                </p>
+            </div>
+            <div class="page-badge" id="badge-capitulo">Capítulo 1</div>
+        </header>
+
+        <nav class="book-toolbar" aria-label="Controles de capítulos e páginas">
+            <div class="chapter-controls">
+                <button type="button" class="toolbar-btn"
+                        onclick="novoCapitulo()">
+                    + Novo Capítulo
+                </button>
+            </div>
+
+            <div class="page-controls">
+                <button type="button" class="toolbar-btn"
+                        id="btn-pagina-anterior"
+                        onclick="paginaAnterior()">
+                    ◄ Anterior
+                </button>
+
+                <span class="page-indicator" id="indicador-pagina"
+                      aria-live="polite">
+                    Página 1 de 1
+                </span>
+
+                <button type="button" class="toolbar-btn"
+                        onclick="proximaPagina()">
+                    Próxima ►
+                </button>
+            </div>
+        </nav>
+
+        <form id="form-conteudo-obra">
+            <section class="manuscript-page" id="folha-manuscrito"
+                     aria-label="Página do manuscrito">
+
+                <label class="visually-hidden" for="texto-obra">
+                    Conteúdo da página
+                </label>
+
+                <textarea
+                    id="texto-obra"
+                    placeholder="Escreva o conteúdo desta página..."
+                    aria-label="Escreva o conteúdo desta página"
+                    required
+                ></textarea>
+
+                <div class="manuscript-page-number" aria-hidden="true">
+                    <span id="numero-pagina-folha">1</span>
+                </div>
+            </section>
+
+            <section class="writing-meta" aria-label="Estatísticas da escrita">
+                <div class="writing-counts">
+                    <span>
+                        <strong id="contador-palavras">0</strong> palavras
+                    </span>
+
+                    <span class="count-separator">•</span>
+
+                    <span>
+                        <strong id="contador-caracteres">0</strong> caracteres
+                    </span>
+                </div>
+
+                <div class="autosave-status" id="status-salvamento"
+                     role="status" aria-live="polite">
+                    <span class="autosave-dot"></span>
+                    <span id="texto-salvamento">
+                        Rascunho ainda não salvo
+                    </span>
+                </div>
+            </section>
+
+            <footer class="book-footer">
+                <button type="button" class="book-nav-btn"
+                        onclick="window.location.href='leitores.html'">
+                    ← Voltar sem Salvar
+                </button>
+
+                <button type="submit" class="publish-btn">
+                    Publicar Obra nas Prateleiras ➔
+                </button>
+            </footer>
+        </form>
+    </main>
+
+    <script>
+        // Cada posição do array representa uma página.
+        let paginas = [""];
+        let paginaAtual = 0;
+
+        // Guarda a página inicial de cada capítulo.
+        let inicioCapitulos = [0];
+
+        let temporizadorSalvamento = null;
+
+        const CHAVE_RASCUNHO = "reading_universe_rascunho";
+
+        const textarea = document.getElementById("texto-obra");
+        const indicadorPagina = document.getElementById("indicador-pagina");
+        const badgeCapitulo = document.getElementById("badge-capitulo");
+        const formObra = document.getElementById("form-conteudo-obra");
+        const folha = document.getElementById("folha-manuscrito");
+
+        // Lê dados do localStorage com tratamento de erros.
+        function lerDadosArmazenados(chave) {
+            try {
+                return JSON.parse(localStorage.getItem(chave));
+            } catch (erro) {
+                console.error(
+                    `Não foi possível ler "${chave}":`,
+                    erro
+                );
+                return null;
+            }
+        }
+
+        function obterObraTemporaria() {
+            return lerDadosArmazenados("obra_em_criacao");
+        }
+
+        // Atualiza a mensagem visual do salvamento.
+        function atualizarStatus(mensagem, estado = "saved") {
+            const status = document.getElementById("status-salvamento");
+
+            document.getElementById("texto-salvamento").textContent =
+                mensagem;
+
+            status.dataset.state = estado;
+        }
+
+        function chaveDaObra(obra) {
+            return `${obra?.titulo || ""}::${obra?.autor || ""}`;
+        }
+
+        // Salva automaticamente todas as páginas e capítulos.
+        function salvarRascunhoAutomaticamente() {
+            const obra = obterObraTemporaria();
+
+            if (!obra) return;
+
+            const rascunho = {
+                identificacao: chaveDaObra(obra),
+                paginas,
+                paginaAtual,
+                inicioCapitulos,
+                atualizadoEm: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem(
+                    CHAVE_RASCUNHO,
+                    JSON.stringify(rascunho)
+                );
+
+                const horario = new Date().toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+                atualizarStatus(
+                    `Salvo automaticamente às ${horario}`,
+                    "saved"
+                );
+
+            } catch (erro) {
+                console.error(
+                    "Não foi possível salvar o rascunho:",
+                    erro
+                );
+
+                atualizarStatus(
+                    "Não foi possível salvar automaticamente",
+                    "error"
+                );
+            }
+        }
+
+        // Aguarda um pequeno intervalo após a digitação.
+        function agendarSalvamento() {
+            atualizarStatus("Salvando...", "saving");
+
+            clearTimeout(temporizadorSalvamento);
+
+            temporizadorSalvamento = setTimeout(() => {
+                salvarPaginaAtual();
+                salvarRascunhoAutomaticamente();
+            }, 650);
+        }
+
+        // Recupera o rascunho anteriormente salvo.
+        function restaurarRascunho(obra) {
+            const rascunho = lerDadosArmazenados(CHAVE_RASCUNHO);
+
+            if (
+                !rascunho ||
+                rascunho.identificacao !== chaveDaObra(obra) ||
+                !Array.isArray(rascunho.paginas) ||
+                rascunho.paginas.length === 0
+            ) {
+                return false;
+            }
+
+            paginas = rascunho.paginas.map(
+                p => String(p ?? "")
+            );
+
+            inicioCapitulos =
+                Array.isArray(rascunho.inicioCapitulos) &&
+                rascunho.inicioCapitulos.length
+                    ? rascunho.inicioCapitulos
+                    : [0];
+
+            paginaAtual = Math.min(
+                Math.max(Number(rascunho.paginaAtual) || 0, 0),
+                paginas.length - 1
+            );
+
+            atualizarStatus(
+                "Rascunho anterior recuperado",
+                "saved"
+            );
+
+            return true;
+        }
+
+        // Guarda o texto da página atual no array.
+        function salvarPaginaAtual() {
+            paginas[paginaAtual] = textarea.value;
+        }
+
+        // Descobre em qual capítulo o escritor está.
+        function descobrirCapituloAtual() {
+            let capitulo = 0;
+
+            inicioCapitulos.forEach((paginaInicial, indice) => {
+                if (paginaAtual >= paginaInicial) {
+                    capitulo = indice + 1;
+                }
+            });
+
+            return Math.max(capitulo, 1);
+        }
+
+        // Atualiza o contador de palavras e caracteres.
+        function atualizarContadores() {
+            const textoCompleto = paginas.join(" ");
+            const textoLimpo = textoCompleto.trim();
+
+            const palavras = textoLimpo
+                ? textoLimpo.split(/\s+/).length
+                : 0;
+
+            document.getElementById("contador-palavras").textContent =
+                palavras.toLocaleString("pt-BR");
+
+            document.getElementById("contador-caracteres").textContent =
+                textoCompleto.length.toLocaleString("pt-BR");
+        }
+
+        // Atualiza todos os elementos da interface.
+        function atualizarInterface() {
+            textarea.value = paginas[paginaAtual] || "";
+
+            indicadorPagina.textContent =
+                `Página ${paginaAtual + 1} de ${paginas.length}`;
+
+            badgeCapitulo.textContent =
+                `Capítulo ${descobrirCapituloAtual()}`;
+
+            document.getElementById("numero-pagina-folha").textContent =
+                paginaAtual + 1;
+
+            document.getElementById(
+                "btn-pagina-anterior"
+            ).disabled = paginaAtual === 0;
+
+            atualizarContadores();
+        }
+
+        // Efeito visual de virada da página.
+        function animarVirada() {
+            folha.classList.remove("page-turn");
+
+            void folha.offsetWidth;
+
+            folha.classList.add("page-turn");
+        }
+
+        // Avança para a próxima página.
+        function proximaPagina() {
+            salvarPaginaAtual();
+
+            if (paginaAtual === paginas.length - 1) {
+                paginas.push("");
+            }
+
+            paginaAtual++;
+
+            atualizarInterface();
+            animarVirada();
+            agendarSalvamento();
+
+            textarea.focus();
+        }
+
+        // Retorna à página anterior.
+        function paginaAnterior() {
+            if (paginaAtual > 0) {
+                salvarPaginaAtual();
+
+                paginaAtual--;
+
+                atualizarInterface();
+                animarVirada();
+                agendarSalvamento();
+
+                textarea.focus();
+            }
+        }
+
+        // Cria um novo capítulo.
+        function novoCapitulo() {
+            salvarPaginaAtual();
+
+            if (
+                inicioCapitulos[
+                    inicioCapitulos.length - 1
+                ] === paginaAtual
+            ) {
+                alert(
+                    "Este capítulo já foi iniciado nesta página."
+                );
+                return;
+            }
+
+            if (paginas[paginaAtual].trim() !== "") {
+                paginas.push("");
+                paginaAtual = paginas.length - 1;
+            }
+
+            inicioCapitulos.push(paginaAtual);
+
+            atualizarInterface();
+            animarVirada();
+            agendarSalvamento();
+
+            textarea.focus();
+        }
+
+        // Carrega os dados da obra ao abrir a página.
+        window.addEventListener("DOMContentLoaded", () => {
+            const obraTemp = obterObraTemporaria();
+
+            if (obraTemp) {
+                document.getElementById(
+                    "titulo-obra-exibicao"
+                ).textContent = obraTemp.titulo || "Escrevendo Obra...";
+
+                const autor = obraTemp.autor || "Autor";
+                const categoria = obraTemp.categoria || "Sem categoria";
+
+                document.getElementById(
+                    "autor-obra-exibicao"
+                ).textContent =
+                    `Por: ${autor} • Categoria: ${categoria.toUpperCase()}`;
+
+                restaurarRascunho(obraTemp);
+            }
+
+            atualizarInterface();
+            textarea.focus();
+        });
+
+        // Detecta a digitação.
+        textarea.addEventListener("input", () => {
+            salvarPaginaAtual();
+            atualizarContadores();
+            agendarSalvamento();
+        });
+
+        // Tenta salvar antes de sair ou atualizar a página.
+        window.addEventListener("beforeunload", () => {
+            clearTimeout(temporizadorSalvamento);
+            salvarPaginaAtual();
+            salvarRascunhoAutomaticamente();
+        });
+
+        // Publica a obra completa.
+        formObra.addEventListener("submit", (evento) => {
+            evento.preventDefault();
+
+            clearTimeout(temporizadorSalvamento);
+            salvarPaginaAtual();
+
+            const obraTemp = obterObraTemporaria();
+            const usuarioLogado = lerDadosArmazenados(
+                "usuarioLogado"
+            );
+
+            if (!obraTemp) {
+                alert(
+                    "Erro: Dados da obra não encontrados. " +
+                    "Inicie o processo novamente."
+                );
+
+                window.location.href = "leitores.html";
+                return;
+            }
+
+            // Organiza páginas e capítulos para publicação.
+            const paginasPublicadas = paginas
+                .map((conteudo, indice) => {
+                    const inicioDoCapitulo =
+                        inicioCapitulos.indexOf(indice);
+
+                    const marcadorCapitulo =
+                        inicioDoCapitulo !== -1
+                            ? `--- CAPÍTULO ${inicioDoCapitulo + 1} ---\n\n`
+                            : "";
+
+                    return marcadorCapitulo + conteudo.trim();
+                })
+                .filter(
+                    conteudo => conteudo.trim() !== ""
+                );
+
+            const conteudoCompleto = paginasPublicadas.join(
+                "\n\n--- PÁGINA ---\n\n"
+            );
+
+            if (!conteudoCompleto.trim()) {
+                alert(
+                    "Escreva o conteúdo da sua obra antes de publicar."
+                );
+
+                textarea.focus();
+                return;
+            }
+
+            const novaObraFinal = {
+                id: "obra_" + Date.now(),
+                autorId: usuarioLogado
+                    ? usuarioLogado.email
+                    : "anonimo",
+                titulo: obraTemp.titulo,
+                autor: obraTemp.autor,
+                categoria: obraTemp.categoria,
+                descricao: obraTemp.descricao,
+                conteudo: conteudoCompleto,
+                totalPaginas: paginas.length,
+                data: new Date().toLocaleDateString()
+            };
+
+            const obrasSalvas =
+                lerDadosArmazenados("reading_universe_obras") || [];
+
+            if (!Array.isArray(obrasSalvas)) {
+                alert(
+                    "Não foi possível acessar a lista de obras salvas."
+                );
+                return;
+            }
+
+            try {
+                obrasSalvas.push(novaObraFinal);
+
+                localStorage.setItem(
+                    "reading_universe_obras",
+                    JSON.stringify(obrasSalvas)
+                );
+
+                localStorage.removeItem(CHAVE_RASCUNHO);
+                localStorage.removeItem("obra_em_criacao");
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao publicar a obra:",
+                    erro
+                );
+
+                alert(
+                    "Não foi possível publicar. " +
+                    "Verifique o espaço disponível no navegador."
+                );
+
+                return;
+            }
+
+            alert(
+                "Obra encadernada e publicada com sucesso " +
+                "nas prateleiras do Reading Universe! 📚✨"
+            );
+
+            window.location.href = "leitores.html";
+        });
+    </script>
+</body>
+</html>

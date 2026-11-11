@@ -549,3 +549,37 @@ body {
     pointer-events: none;
     transform: scale(0.8) translateY(20px); /* Dá um efeito sutil de descida ao sumir */
 }
+/* --- ESTILOS PARA O BANNER DINÂMICO E AVATAR --- */
+#main-banner-card {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#user-avatar-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Estilo do botão do modal de leitura */
+.btn-read {
+  background-color: var(--purple-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-read:hover {
+  background-color: var(--purple-hover);
+}
+
+.btn-read:active {
+  transform: scale(0.95);
+}
